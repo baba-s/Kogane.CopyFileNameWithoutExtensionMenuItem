@@ -1,28 +1,46 @@
 ﻿using System.IO;
+using System.Linq;
 using UnityEditor;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
 
 namespace Kogane.Internal
 {
     internal static class CopyFileNameWithoutExtensionMenuItem
     {
-        [Shortcut( "Kogane/Copy File Name Without Extension", KeyCode.C, ShortcutModifiers.Action | ShortcutModifiers.Shift )]
+        private const string MENU_ITEM_NAME = @"Assets/Kogane/Copy File Name Without Extension (Multiple) %#c";
+
+        [MenuItem( MENU_ITEM_NAME, true )]
+        private static bool CanCopy()
+        {
+            return Selection.assetGUIDs is { Length: > 0 };
+        }
+
+        [MenuItem( MENU_ITEM_NAME )]
         private static void Copy()
         {
-            var activeObject = Selection.activeObject;
+            var assetGUIDs = Selection.assetGUIDs;
 
-            if ( activeObject == null ) return;
+            if ( assetGUIDs == null || assetGUIDs.Length <= 0 ) return;
 
-            var assetPath = AssetDatabase.GetAssetPath( activeObject );
+            if ( assetGUIDs.Length == 1 )
+            {
+                var assetPath                = AssetDatabase.GUIDToAssetPath( assetGUIDs[ 0 ] );
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( assetPath );
+                EditorGUIUtility.systemCopyBuffer = fileNameWithoutExtension;
+                Debug.Log( $"Copied! `{fileNameWithoutExtension}`" );
+            }
+            else
+            {
+                var assetPaths = assetGUIDs
+                        .Select( x => AssetDatabase.GUIDToAssetPath( x ) )
+                        .Select( x => Path.GetFileNameWithoutExtension( x ) )
+                        .OrderBy( x => x )
+                    ;
 
-            if ( string.IsNullOrWhiteSpace( assetPath ) ) return;
-
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( assetPath );
-
-            EditorGUIUtility.systemCopyBuffer = fileNameWithoutExtension;
-
-            Debug.Log( $"Copied! `{fileNameWithoutExtension}`" );
+                var result = string.Join( "\n", assetPaths );
+                EditorGUIUtility.systemCopyBuffer = result;
+                Debug.Log( $"Copied!\n```\n{result}\n```" );
+            }
         }
     }
 }
