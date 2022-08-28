@@ -1,5 +1,7 @@
 # Kogane Copy File Name Without Extension Menu Item
 
+![2022-08-28_095717](https://user-images.githubusercontent.com/6134875/187053196-1fd87c1a-7fac-4caf-87d2-7c7e23a32fac.png)
+
 Project ビューで複数のアセットのファイル名をコピーできるようにするエディタ拡張
 
 ## 使い方
