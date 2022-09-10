@@ -15,7 +15,7 @@ namespace Kogane.Internal
             return Selection.assetGUIDs is { Length: > 0 };
         }
 
-        [MenuItem( MENU_ITEM_NAME )]
+        [MenuItem( MENU_ITEM_NAME, false, 1155823429 )]
         private static void Copy()
         {
             var assetGUIDs = Selection.assetGUIDs;
