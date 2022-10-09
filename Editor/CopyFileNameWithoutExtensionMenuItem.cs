@@ -27,7 +27,9 @@ namespace Kogane.Internal
                 var assetPath                = AssetDatabase.GUIDToAssetPath( assetGUIDs[ 0 ] );
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension( assetPath );
                 EditorGUIUtility.systemCopyBuffer = fileNameWithoutExtension;
-                Debug.Log( $"Copied! `{fileNameWithoutExtension}`" );
+                var message = $"Copied! `{fileNameWithoutExtension}`";
+                Debug.Log( message );
+                TooltipWindow.Open( "Copied!" );
             }
             else
             {
@@ -39,7 +41,9 @@ namespace Kogane.Internal
 
                 var result = string.Join( "\n", assetPaths );
                 EditorGUIUtility.systemCopyBuffer = result;
-                Debug.Log( $"Copied!\n```\n{result}\n```" );
+                var message = $"Copied!\n```\n{result}\n```";
+                Debug.Log( message );
+                TooltipWindow.Open( "Copied!" );
             }
         }
     }
